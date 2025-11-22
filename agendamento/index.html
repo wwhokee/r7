@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento | R7 Formaturas</title>
+    <link rel="shortcut icon" href="../src/logo/favicon.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../src/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="../index.html" class="logo">
+                <img src="../src/logo/logo.png" alt="R7 Formaturas" style="max-height: 50px;">
+            </a>
+            <button class="mobile-menu-btn" aria-label="Menu"><i class="fas fa-bars"></i></button>
+            <ul class="nav-links">
+                <li><a href="../index.html">Início</a></li>
+                <li><a href="../servicos/index.html">Serviços</a></li>
+                <li><a href="../eventos/index.html">Eventos</a></li>
+                <li><a href="index.html" class="active">Agendamento</a></li>
+                <li><a href="../saq/index.html">Dúvidas? Aqui!</a></li>
+                <li><a href="../index.html#contato" class="btn-contact">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <header class="hero" style="height: 50vh; min-height: 400px; position: relative; overflow: hidden;">
+        <div class="hero-overlay"></div>
+
+        <img src="../src/logo/logo.png" alt="Logo de Fundo" style="
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            height: 80%; 
+            width: auto;
+            opacity: 0.1; 
+            z-index: 0;
+            pointer-events: none;
+            filter: grayscale(100%) brightness(150%);
+        ">
+
+        <div class="container hero-content" style="position: relative; z-index: 2;">
+            <h1>Agendamento</h1>
+            <p>Fale diretamente com nossos consultores.</p>
+        </div>
+    </header>
+
+    <section class="section">
+        <div class="container">
+            <div class="contact-wrapper"
+                style="max-width: 800px; margin: 0 auto; text-align: center; display: block; background: transparent; box-shadow: none; border: none;">
+
+                <div style="
+                    padding: 60px 30px; 
+                    background-color: var(--card-bg, #1e1e1e); 
+                    border: 1px solid #333; 
+                    border-radius: 10px; 
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                ">
+
+
+                    <i class="fab fa-whatsapp"
+                        style="font-size: 5rem; color: #25D366; margin-bottom: 25px; filter: drop-shadow(0 0 10px rgba(37, 211, 102, 0.3));"></i>
+
+                    <h3 style="margin-bottom: 15px; font-size: 2rem; color: #fff;">Central de Atendimentos</h3>
+
+                    <p style="margin-bottom: 40px; font-size: 1.1rem; color: #ccc;">
+                        Para agilizar seu atendimento e oferecer uma experiência personalizada,<br>
+                        realizamos nossos agendamentos exclusivamente pelo WhatsApp.
+                    </p>
+
+                    <a href="https://wa.me/5562993580202" target="_blank" class="btn btn-primary"
+                        style="text-decoration: none; padding: 18px 50px; font-size: 1.2rem; display: inline-flex; align-items: center; gap: 10px;">
+                        <i class="fab fa-whatsapp"></i> Agendar Agora
+                    </a>
+
+                    <p style="margin-top: 20px; font-size: 0.9rem; color: #666;">
+                        (62) 99358-0202
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-logo">
+                <img src="../src/logo/logo.png" alt="R7 Formaturas Logo" class="footer-logo-img">
+            </div>
+            <p class="copyright">© 2025 R7 Formaturas. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="../src/js/script.js"></script>
+</body>
+
+</html>
