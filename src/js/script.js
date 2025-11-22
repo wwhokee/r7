@@ -1,5 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Mobile Menu Toggle
+
+    // ======================================================
+    // 1. PROTEÇÃO DE IMAGENS (Não baixar logos/fotos)
+    // ======================================================
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault(); // Bloqueia botão direito em imagens
+        }
+    });
+
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault(); // Bloqueia arrastar imagens
+        }
+    });
+
+    // ======================================================
+    // 2. MENU MOBILE & NAVEGAÇÃO
+    // ======================================================
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
     const links = document.querySelectorAll('.nav-links li');
@@ -8,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         mobileBtn.addEventListener('click', () => {
             navLinks.classList.toggle('active');
 
-            // Animate Links
+            // Animação dos Links
             links.forEach((link, index) => {
                 if (link.style.animation) {
                     link.style.animation = '';
@@ -17,19 +35,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Burger Animation
+            // Animação do Ícone Hamburguer
             mobileBtn.classList.toggle('toggle');
         });
     }
 
-    // Smooth Scrolling for Anchor Links
+    // Scroll Suave
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             e.preventDefault();
 
-            // Close mobile menu if open
             if (navLinks.classList.contains('active')) {
                 navLinks.classList.remove('active');
+                mobileBtn.classList.remove('toggle'); // Garante que o ícone volte ao normal
             }
 
             const targetId = this.getAttribute('href');
@@ -49,22 +67,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Navbar Scroll Effect
+    // Efeito da Navbar ao rolar
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
-            navbar.style.backgroundColor = 'rgba(17, 17, 17, 1)';
+            navbar.style.backgroundColor = 'rgba(10, 10, 10, 1)'; // Cor sólida (Dark Mode)
             navbar.style.padding = '10px 0';
+            navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.5)';
         } else {
-            navbar.style.backgroundColor = 'rgba(17, 17, 17, 0.95)';
+            navbar.style.backgroundColor = 'rgba(10, 10, 10, 0.95)';
             navbar.style.padding = '15px 0';
+            navbar.style.boxShadow = 'none';
         }
     });
 
-    // Intersection Observer for Scroll Animations
-    const observerOptions = {
-        threshold: 0.1
-    };
+    // ======================================================
+    // 3. ANIMAÇÕES DE SCROLL (Fade In)
+    // ======================================================
+    const observerOptions = { threshold: 0.1 };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -75,9 +95,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
-    // Reveal on scroll for elements
-    const revealElements = document.querySelectorAll('.service-card, .about-text, .about-image');
+    // Elementos que devem aparecer ao rolar
+    const revealElements = document.querySelectorAll('.service-card, .about-text, .about-image, .hero-content, .section-header');
 
+    // Adiciona classe para disparar animação CSS (caso use classes .visible)
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -88,72 +109,86 @@ document.addEventListener('DOMContentLoaded', () => {
     }, { threshold: 0.1 });
 
     revealElements.forEach(el => {
-        // revealObserver.observe(el); // Ative se tiver CSS para .revealed
+        // revealObserver.observe(el); // Opcional: Ative se usar CSS de reveal
     });
 
-    // ==========================================
-    //  NOVO CÓDIGO: CURSOR PERSONALIZADO
-    // ==========================================
+    // ======================================================
+    // 4. CURSOR PERSONALIZADO (Apenas Desktop)
+    // ======================================================
 
-    const cursor = document.createElement('img');
-    cursor.id = 'custom-cursor';
+    // Verifica se o dispositivo tem suporte a mouse (hover) e ponteiro fino.
+    // Isso exclui celulares e tablets da lógica do cursor.
+    const isDesktop = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-    // 1. Lógica inteligente para achar o caminho da imagem (Root vs Subpasta)
-    // Verifica como o CSS foi importado para saber se precisa de "../"
-    const cssLink = document.querySelector('link[rel="stylesheet"][href*="src/css/styles.css"]');
-    let pathPrefix = '';
+    if (isDesktop) {
+        const cursor = document.createElement('img');
+        cursor.id = 'custom-cursor';
 
-    if (cssLink) {
-        const href = cssLink.getAttribute('href');
-        if (href.includes('../')) {
-            pathPrefix = '../';
+        // Lógica de Caminho da Imagem (Root vs Subpasta)
+        const cssLink = document.querySelector('link[rel="stylesheet"][href*="src/css/styles.css"]');
+        let pathPrefix = '';
+
+        if (cssLink) {
+            const href = cssLink.getAttribute('href');
+            if (href.includes('../')) {
+                pathPrefix = '../';
+            }
         }
+
+        cursor.src = `${pathPrefix}src/cursor/cursor.png`;
+        cursor.alt = 'Cursor';
+
+        // Estilos do Cursor
+        Object.assign(cursor.style, {
+            width: '75px',
+            height: 'auto',
+            position: 'fixed',
+            pointerEvents: 'none',
+            zIndex: '99999',
+            transform: 'translate(-50%, -50%)',
+            transition: 'transform 0.15s ease-out', // Um pouco mais suave
+            left: '-100px', // Começa fora da tela
+            top: '-100px',
+            display: 'block'
+        });
+
+        document.body.appendChild(cursor);
+
+        // Esconde o cursor padrão SOMENTE se for desktop
+        const style = document.createElement('style');
+        style.innerHTML = `
+            body, a, button, .btn, img { cursor: none !important; }
+            input, textarea { cursor: text !important; }
+        `;
+        document.head.appendChild(style);
+
+        // Movimento
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = `${e.clientX}px`;
+            cursor.style.top = `${e.clientY}px`;
+        });
+
+        // Efeito de Hover (Crescer)
+        const clickables = document.querySelectorAll('a, button, .btn, input, textarea, .service-card');
+        clickables.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                cursor.style.filter = 'drop-shadow(0 0 5px rgba(255,0,0,0.5))'; // Brilho sutil vermelho
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+                cursor.style.filter = 'none';
+            });
+        });
+
+        // Garante que ao sair da janela o cursor suma (opcional)
+        document.addEventListener('mouseout', (e) => {
+            if (!e.relatedTarget && !e.toElement) {
+                cursor.style.opacity = '0';
+            }
+        });
+        document.addEventListener('mouseover', () => {
+            cursor.style.opacity = '1';
+        });
     }
-
-    // Define o caminho e atributos da imagem
-    cursor.src = `${pathPrefix}src/cursor/cursor.png`;
-    cursor.alt = 'Cursor';
-
-    // 2. Estilização via JS para garantir tamanho pequeno e sem erros
-    Object.assign(cursor.style, {
-        width: '70px',       // Tamanho pequeno e ajustado
-        height: 'auto',
-        position: 'fixed',
-        pointerEvents: 'none', // Permite clicar através da imagem
-        zIndex: '99999',       // Fica acima de tudo
-        transform: 'translate(-50%, -50%)', // Centraliza na ponta do mouse
-        transition: 'transform 0.1s ease',  // Suavidade leve
-        left: '0px',
-        top: '0px',
-        display: 'none' // Escondido até o mouse mover
-    });
-
-    document.body.appendChild(cursor);
-
-    // 3. CSS Injetado para esconder o cursor padrão original
-    const style = document.createElement('style');
-    style.innerHTML = `
-        body, a, button, .btn { cursor: none !important; }
-        /* Mantém o cursor de texto padrão em inputs para facilitar digitação */
-        input, textarea { cursor: text !important; }
-    `;
-    document.head.appendChild(style);
-
-    // 4. Faz a imagem seguir o mouse
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.display = 'block';
-        cursor.style.left = `${e.clientX}px`;
-        cursor.style.top = `${e.clientY}px`;
-    });
-
-    // 5. Efeito extra: Aumentar um pouco ao passar em links/botões
-    const clickables = document.querySelectorAll('a, button, .btn, input, textarea');
-    clickables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1.3)';
-        });
-        el.addEventListener('mouseleave', () => {
-            cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-        });
-    });
 });
